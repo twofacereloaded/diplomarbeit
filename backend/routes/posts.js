@@ -3,6 +3,29 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const Post = require("../models/post");
 const router = express.Router();
+const multer = require("multer");
+
+const MIME_TYPE_MAP = {
+  'image/png': 'png',
+  'image/jpeg': 'jpeg',
+  'image/jpg': 'jpg',
+};
+
+const storage = multer.diskStorage({
+  destination: (req,file, cd) => {
+    const isValid = MIME_TYPE_MAP[file.mimetype];
+    let error = new Error("Invalid mime type");
+    if (isValid) {
+      error = null;
+    }
+    cb(null, 'backend/images');
+  },
+  filename: (req, file, cd) => {
+    const name = file.originalname.toLowerCase().split('').join('-');
+    const ext = MINE_TYPE_MAP[file.mimetype];
+    cb(null, name + '-' + Date.now() + '.' + ext);
+  }
+});
 
 //FIND - all posts
 router.get('', (req, res, next) => {
