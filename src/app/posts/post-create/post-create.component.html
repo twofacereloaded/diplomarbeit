@@ -1,4 +1,4 @@
-<!-- <textarea rows="6" [value]="newPost" #postInput></textarea> -->
+
 <mat-card>
     <mat-spinner *ngIf="isLoading"></mat-spinner>
     <form [formGroup]="form" (submit)="onSavePost()" *ngIf="!isLoading">
@@ -30,4 +30,3 @@
       <button mat-raised-button color="primary" type="submit">Save Post</button>
     </form>
 </mat-card>
-<!-- <button (click)='onAddPost(postInput)'>Save Post</button> -->
