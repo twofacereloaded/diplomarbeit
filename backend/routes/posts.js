@@ -46,18 +46,25 @@ router.get('', (req, res, next) => {
   postQuery.then(documents => {
       fetchedPosts = documents;
       return Post.count();
-    }).then( count => {
+    })
+    .then( count => {
       res.status(200).json({
         message: 'Posts fetched succesfully',
         posts: fetchedPosts,
         maxPosts: count
+      });
+    })
+    .catch(error => {
+      res.status(500).json({
+        message: "Fetching posts failed!"
       });
     });
 });
 
 //FIND - one post
 router.get("/:id", (req, res, next) => {
-  Post.findById(req.params.id).then((post) => {
+  Post.findById(req.params.id)
+  .then((post) => {
     if (post) {
       res.status(200).json(post);
     } else {
@@ -65,6 +72,11 @@ router.get("/:id", (req, res, next) => {
         message: 'Post not found!'
       });
     }
+  })
+  .catch(error => {
+    res.status(500).json({
+      message: "Fetching post failed!"
+    });
   });
 });
 
@@ -81,8 +93,6 @@ router.post(
     imagePath: url + "/images/" + req.file.filename,
     creator: req.userData.userId
   });
-  // console.log(req.userData);
-  // return res.status(200).json({});
   post.save().then((createdPost) => {
     res
       .status(201)
@@ -93,7 +103,12 @@ router.post(
           id: createdPost._id
         }
       });
-  });
+  })
+  .catch(error => {
+    res.status(500).json({
+      message: 'Creating a post failed!'
+    });
+  })
 });
 
 //UPDATE
@@ -124,9 +139,13 @@ router.put(
           message: "Not authorized"
         });
       }
+    })
+    .catch(error => {
+      res.status(500).json({
+        message: "Couldn't update post!"
+      });
     });
-  }
-);
+  });
 
 
 //DELETE
@@ -134,7 +153,8 @@ router.delete("/:id", checkAuth, (req, res, next) => {
   Post.deleteOne({
     _id: req.params.id,
     creator: req.userData.userId
-  }).then(deletedPost => {
+  })
+  .then(deletedPost => {
     console.log(deletedPost);
     if (deletedPost.n > 0) {
       res.status(201).json({
@@ -142,9 +162,14 @@ router.delete("/:id", checkAuth, (req, res, next) => {
       });
     } else {
       res.status(401).json({
-        message: "Not authorized"
+        message: "Not authorized!"
       });
     }
+  })
+  .catch(error => {
+    res.status(500).json({
+      message: "Fetching post failed!"
+    });
   });
 });
 
