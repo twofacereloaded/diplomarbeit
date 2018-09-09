@@ -41,8 +41,8 @@ router.post("/login", (req, res, next) => {
     return bcrypt.compare(req.body.password, user.password)
   })
   .then(result => {
-    console.log(result);
     if (!result) {
+      console.log("Authentication failed");
       return res.status(401).json({
         message: "Auth failed"
       });
@@ -52,7 +52,6 @@ router.post("/login", (req, res, next) => {
       "secret_this_should_be_longer",
       { expiresIn: "1h" }
     );
-    console.log(token);
     res.status(200).json({
       token: token,
       expiresIn: 3600,
