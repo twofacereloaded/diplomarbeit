@@ -24,6 +24,7 @@
     "@angular/platform-browser": "^6.1.0",
     "@angular/platform-browser-dynamic": "^6.1.0",
     "@angular/router": "^6.1.0",
+    "@types/mapbox-gl": "^0.48.0",
     "@types/underscore": "^1.8.9",
     "angularfire2": "^5.0.1",
     "bcrypt": "^3.0.0",
@@ -40,7 +41,6 @@
     "multer": "^1.3.1",
     "nodemon": "^1.18.4",
     "rxjs": "^6.0.0",
-    "splitting": "^1.0.5",
     "underscore": "^1.9.1",
     "zone.js": "~0.8.26"
   },

@@ -4,6 +4,7 @@ import { PostListComponent } from './posts/post-list/post-list.component';
 import { PostCreateComponent } from './posts/post-create/post-create.component';
 import { AuthGuard } from './auth/auth.guard';
 import { LoadaniComponent } from './test/loadani/loadani.component';
+import { MapComponent } from './maps/map/map.component';
 
 
 const routes: Routes = [
@@ -11,7 +12,8 @@ const routes: Routes = [
   { path: 'create', component: PostCreateComponent, canActivate: [AuthGuard] },
   { path: 'edit/:postId', component: PostCreateComponent, canActivate: [AuthGuard] },
   { path: 'auth', loadChildren: './auth/auth.module#AuthModule' },
-  { path: 'load', component: LoadaniComponent }
+  { path: 'load', component: LoadaniComponent },
+  { path: 'map', component: MapComponent }
 ];
 
 @NgModule({

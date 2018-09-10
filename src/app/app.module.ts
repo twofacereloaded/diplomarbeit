@@ -12,19 +12,21 @@ import { HeaderComponent } from './header/header.component';
 import { ErrorComponent } from './error/error.component';
 
 import { AuthInterceptor } from './auth/auth-interceptor';
-import { ErrorInterceptor } from './error-interceptor';
+import { ErrorInterceptor } from './error/error-interceptor';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AngularMaterialModule } from './angular-material.module';
 import { PostsModule } from './posts/posts.module';
 import { LoadaniComponent } from './test/loadani/loadani.component';
+import { MapComponent } from './maps/map/map.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
     ErrorComponent,
-    LoadaniComponent
+    LoadaniComponent,
+    MapComponent
   ],
   imports: [
     BrowserModule,
