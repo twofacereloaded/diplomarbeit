@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import * as mapboxgl from 'mapbox-gl';
 import { Map } from 'mapbox-gl';
 import { MapService } from '../map.service';
-import { Subscription } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
 @Component({
@@ -18,18 +17,51 @@ export class MapComponent implements OnInit {
   zoom = 2;
   url = 'https://wanderdrone.appspot.com/';
 
+
   constructor(private mapService: MapService) {}
   ngOnInit() {
     this.buildMap();
   }
 
+  buildMap() {
+
+    marker = new mapboxgl.Marker();
+    this.map = new Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/light-v9',
+      zoom: this.zoom,
+      center: [this.lng, this.lat]
+    });
+
+    this.map.on('load', () => {
+      window.setInterval( () => {
+        this.map.getSource('Point').setData(this.url);
+      }, 2000);
+      // this.map.getSource('Point').animate(1000);
+      // this.map.getSource('Point').setData(this.url);
+      this.map.addSource('Point', {
+        type: 'geojson',
+        data: this.url
+      });
+
+      this.map.addLayer({
+        id: 'Point',
+        source: 'Point',
+        type: 'circle',
+        paint: {
+          'circle-radius': 10,
+          'circle-color': '#007cbf'
+        }
+      });
+      // Start the animation.
+
+    });
+  }
+
   pointOnCircle(angle) {
     return {
-      "type": "Point",
-      "coordinates": [
-        Math.cos(angle) * 20,
-        Math.sin(angle) * 20
-      ]
+      type: "Point",
+      coordinates: [Math.cos(angle) * 20, Math.sin(angle) * 20]
     };
   }
 
@@ -43,34 +75,6 @@ export class MapComponent implements OnInit {
   }
 
   point() {
-  return this.url;
-  }
-
-  buildMap() {
-    this.map = new Map({
-      container: 'map',
-      style: 'mapbox://styles/mapbox/light-v9',
-      zoom: this.zoom,
-      center: [this.lng, this.lat]
-    });
-
-    this.map.on('load', () => {
-      this.map.addSource('Point', {
-        type: 'geojson',
-        data: this.url
-      });
-
-      this.map.addLayer({
-        'id': 'Point',
-        'source': 'Point',
-        'type': 'circle',
-        'paint': {
-          'circle-radius': 10,
-          'circle-color': '#007cbf'
-        }
-      });
-      // Start the animation.
-      this.animateMarker();
-    });
+    return this.url;
   }
 }
