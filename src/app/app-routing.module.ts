@@ -8,12 +8,16 @@ import { MapComponent } from './maps/map/map.component';
 
 
 const routes: Routes = [
-  { path: 'list', component: PostListComponent },
-  { path: 'create', component: PostCreateComponent, canActivate: [AuthGuard] },
-  { path: 'edit/:postId', component: PostCreateComponent, canActivate: [AuthGuard] },
-  { path: 'auth', loadChildren: './auth/auth.module#AuthModule' },
-  { path: 'load', component: LoadaniComponent },
-  { path: 'map', component: MapComponent }
+  { path: "list", component: PostListComponent },
+  { path: "create", component: PostCreateComponent, canActivate: [AuthGuard] },
+  {
+    path: "edit/:postId",
+    component: PostCreateComponent,
+    canActivate: [AuthGuard]
+  },
+  { path: "auth", loadChildren: "./auth/auth.module#AuthModule" },
+  { path: "load", component: LoadaniComponent },
+  { path: "map", component: MapComponent }
 ];
 
 @NgModule({

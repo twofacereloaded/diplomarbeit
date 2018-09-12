@@ -2,6 +2,9 @@
   <span><a routerLink="/">Posts</a></span>
   <span class="spacer"></span>
   <ul>
+    <li>
+      <a mat-button routerLink="/map" routerLinkActive="mat-accent">Map</a>
+    </li>
     <li *ngIf="userIsAuthenticated">
       <a mat-button routerLink="/create" routerLinkActive="mat-accent">New post</a>
     </li>
