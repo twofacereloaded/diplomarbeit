@@ -7,12 +7,12 @@ export const environment = {
   apiUrl: 'http://localhost:3000/api',
 
   firebase: {
-      apiKey: 'AIzaSyA5VBlvbTD_Gtl9IwgJc1vdGDZF24K9X5c',
-      authDomain: 'diplomarbeit-9dd8c.firebaseapp.com',
-      databaseURL: 'https://diplomarbeit-9dd8c.firebaseio.com',
-      projectId: 'diplomarbeit-9dd8c',
-      storageBucket: 'diplomarbeit-9dd8c.appspot.com',
-      messagingSenderId: '532004071803'
+    apiKey: 'AIzaSyA5VBlvbTD_Gtl9IwgJc1vdGDZF24K9X5c',
+    authDomain: 'diplomarbeit-9dd8c.firebaseapp.com',
+    databaseURL: 'https://diplomarbeit-9dd8c.firebaseio.com',
+    projectId: 'diplomarbeit-9dd8c',
+    storageBucket: 'diplomarbeit-9dd8c.appspot.com',
+    messagingSenderId: '532004071803'
   },
 
   mapbox: {

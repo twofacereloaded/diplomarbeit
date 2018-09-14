@@ -1,7 +1,10 @@
 <div class="row-map">
   <div>
-    <h2 class="heading">Map Test</h2>
-    <hr />
+    <h2 class="heading" (click)="flyTo(dolceMarker)">Map Test</h2>
     <div id="map"></div>
   </div>
+  <hr>
+  <button mat-raised-button color="accent" (click)="flyTo(dolceMarker)">ok cool</button>
+  <button mat-raised-button color="accent" (click)="removeMarker(markers[0])">delete 0</button>
 </div>
+
