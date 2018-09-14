@@ -1,5 +1,7 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 .env
+/src/enviroments
+/backend/images
 # compiled output
 /dist
 /tmp
@@ -7,6 +9,7 @@
 
 # dependencies
 /node_modules
+
 
 # IDEs and editors
 /.idea

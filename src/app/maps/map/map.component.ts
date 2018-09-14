@@ -48,7 +48,7 @@ export class MapComponent implements OnInit, OnDestroy {
       });
     this.buildMap();
     this.initialiseMap();
-    console.log(this.markers);
+
   }
 
   buildMap() {
@@ -120,9 +120,9 @@ export class MapComponent implements OnInit, OnDestroy {
 
       // Map get source
       this.sourceMarkers = this.map.getSource('firebase');
-
       // Subscribe to realtime database and set data source
       this.markers.valueChanges().subscribe(markers => {
+        console.log(markers);
         const data = new FeatureCollection(markers);
         this.sourceMarkers.setData(data);
       });

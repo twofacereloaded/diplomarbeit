@@ -8,7 +8,6 @@ import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
   providedIn: "root"
 })
 export class MapService {
-  markers: AngularFireList<any[]> = null;
 
   private markerPath = "/marker";
 
