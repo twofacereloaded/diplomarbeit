@@ -25,10 +25,13 @@ export class MapComponent implements OnInit, OnDestroy {
 
   sourceMarkers: any;
   sourceCords: any;
-  markers: any;
-  message = "Dolce Vita";
 
+  message = "Dolce Vita";
   dolceMarker;
+
+  markers: any;
+  keys: any;
+  lastKey: any;
   private authStatusSub: Subscription;
 
   constructor(
@@ -47,7 +50,6 @@ export class MapComponent implements OnInit, OnDestroy {
       });
     this.buildMap();
     this.initialiseMap();
-
   }
 
   buildMap() {
@@ -73,6 +75,12 @@ export class MapComponent implements OnInit, OnDestroy {
     });
     // Get Markers from firebase
     this.markers = this.mapService.getMarker();
+    this.mapService.getKeys().subscribe(data => {
+      this.keys = data;
+      if (this.keys.length > 0) {
+        this.lastKey = this.keys[this.keys.length - 1].key;
+      }
+    });
     this.dolceMarker = this.mapService.setMarkerGeoJson(this.coordinates);
     /// Add realtime data on map load
     this.map.on('load', () => {
@@ -89,6 +97,7 @@ export class MapComponent implements OnInit, OnDestroy {
       data: this.dolceMarker
     });
 
+    console.log(this.lastKey);
     this.map.addLayer({
       id: 'Dolce',
       source: 'Dolce',
@@ -182,8 +191,8 @@ export class MapComponent implements OnInit, OnDestroy {
     });
   }
 
-  removeMarker(marker) {
-    this.mapService.removeMarker(marker.$key);
+  removeMarker(key) {
+    this.mapService.removeMarker(key);
   }
 
   ngOnDestroy() {
