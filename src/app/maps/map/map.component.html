@@ -7,9 +7,10 @@
   <div *ngIf="userIsAuthenticated">
     <button mat-raised-button color="accent" (click)="removeMarker(lastKey)">Delete Last</button>
     <button mat-raised-button color="accent" (click)="removeMarker(firstKey)">Delete First</button>
-    <button mat-raised-button color="accent" (click)="removeMarker(firstKey)">Delete First</button>
+    <button mat-raised-button color="accent" (click)="removeAllMarkers()">Delete All</button>
   </div>
-  <button mat-raised-button color="accent" (click)="flyTo(dolceMarker)">Fly to</button>
-  <button mat-raised-button color="accent" (click)="flyOut(dolceMarker)">Fly out</button>
+  <button mat-raised-button color="accent" (click)="flyTo(trackerMarker)">Eiswagen</button>
+  <button mat-raised-button color="accent" (click)="flyTo(dolceMarker)">Dolce Vita</button>
+  <button mat-raised-button color="accent" (click)="flyOut(dolceMarker)">Übersicht</button>
 </div>
 

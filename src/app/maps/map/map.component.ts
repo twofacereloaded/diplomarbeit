@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
+import * as mapboxgl from "mapbox-gl";
 import { Map } from 'mapbox-gl';
 import { MapService } from '../map.service';
 import { GeoJson, FeatureCollection } from '../map.modul';
@@ -20,7 +21,7 @@ export class MapComponent implements OnInit, OnDestroy {
   lat = 47.424778;
   lng = 12.849172;
   coordinates = [this.lng, this.lat];
-  startZoom = 2;
+  startZoom = 12;
   message = "Dolce Vita";
   testGeoJsonUrl = "https://wanderdrone.appspot.com/";
   // Mapbox data source
@@ -38,6 +39,7 @@ export class MapComponent implements OnInit, OnDestroy {
   keys: any;
   lastKey: any;
   firstKey: any;
+  setNewMarker = false;
 
   constructor(
     private mapService: MapService,
@@ -63,21 +65,14 @@ export class MapComponent implements OnInit, OnDestroy {
       container: "map", // tslint:disable-next-line:quotemark
       style: "mapbox://styles/mapbox/light-v9",
       zoom: this.startZoom,
+      maxZoom: 18,
+      minZoom: 2,
       center: this.coordinates
     });
   }
 
   initialiseMap() {
-    // Add Marker on Click
-    this.map.on("click", event => {
-      if (this.userIsAuthenticated) {
-        const coordinates = [event.lngLat.lng, event.lngLat.lat];
-        const newMarker = new GeoJson(coordinates, {
-          message: this.message
-        });
-        this.mapService.createMarker(newMarker);
-      }
-    });
+    this.map.doubleClickZoom.disable();
     // Get Markers from firebase
     this.markers = this.mapService.getMarker();
     this.dolceMarker = this.mapService.setMarkerGeoJson(this.coordinates);
@@ -93,10 +88,10 @@ export class MapComponent implements OnInit, OnDestroy {
     }
     // Add realtime data on map load
     this.map.on("load", () => {
-      this.initialiseFirebaseMarkers();
       this.initialisePreSetMarker();
       this.initialiseTracking();
       this.initialiseSimulation();
+      this.initialiseFirebaseMarkers();
     });
   }
 
@@ -106,6 +101,8 @@ export class MapComponent implements OnInit, OnDestroy {
       type: "geojson",
       data: this.dolceMarker
     });
+
+    this.clickFlyTo("Dolce", 14);
 
     this.map.addLayer({
       id: "Dolce",
@@ -126,6 +123,21 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   initialiseFirebaseMarkers() {
+
+    // Add Marker on Click
+    this.map.on("click", event => {
+      if (this.userIsAuthenticated && this.setNewMarker) {
+        const coordinates = [event.lngLat.lng, event.lngLat.lat];
+        const newMarker = new GeoJson(coordinates, {
+          message: this.message
+        });
+        this.mapService.createMarker(newMarker);
+      }
+    });
+
+    this.clickFlyTo("firebase", 12);
+
+
     // Map register source
     this.map.addSource("firebase", {
       type: "geojson",
@@ -238,12 +250,37 @@ export class MapComponent implements OnInit, OnDestroy {
   flyOut(data: GeoJson) {
     this.map.flyTo({
       center: data.geometry.coordinates,
-      zoom: 2
+      zoom: 4
     });
   }
 
   removeMarker(key) {
     this.mapService.removeMarker(key);
+  }
+
+  removeAllMarkers() {
+    this.keys.forEach(element => {
+      this.removeMarker(element.key);
+    });
+  }
+
+  clickFlyTo(id, zoom) {
+    this.map.on('dblclick', id, event => {
+        this.map.flyTo({
+          center: event.features[0].geometry.coordinates,
+          zoom: zoom
+        });
+    });
+    this.pointerOnOff(id);
+  }
+
+  pointerOnOff(id) {
+    this.map.on("mouseenter", id, () => {
+      this.map.getCanvas().style.cursor = "pointer";
+    });
+    this.map.on("mouseleave", id, () => {
+      this.map.getCanvas().style.cursor = "";
+    });
   }
 
   ngOnDestroy() {
