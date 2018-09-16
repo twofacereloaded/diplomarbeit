@@ -39,7 +39,7 @@ export class MapComponent implements OnInit, OnDestroy {
   keys: any;
   lastKey: any;
   firstKey: any;
-  setNewMarker = false;
+  setNewMarker = true;
 
   constructor(
     private mapService: MapService,
@@ -75,7 +75,8 @@ export class MapComponent implements OnInit, OnDestroy {
     this.map.doubleClickZoom.disable();
     // Get Markers from firebase
     this.markers = this.mapService.getMarker();
-    this.dolceMarker = this.mapService.setMarkerGeoJson(this.coordinates);
+    this.dolceMarker = this.mapService
+    .setMarkerGeoJson(this.coordinates);
     // Get Keys from firebase if Authenticated
     if (this.userIsAuthenticated) {
       this.mapService.getKeys().subscribe(data => {
@@ -97,16 +98,18 @@ export class MapComponent implements OnInit, OnDestroy {
 
   initialisePreSetMarker() {
     // Map register source
-    this.map.addSource("Dolce", {
+    const id = "Dolce";
+    this.map.addSource(id, {
       type: "geojson",
       data: this.dolceMarker
     });
 
-    this.clickFlyTo("Dolce", 14);
+    this.clickFlyTo(id, 14);
+    this.showPopup(id, this.message);
 
     this.map.addLayer({
-      id: "Dolce",
-      source: "Dolce",
+      id: id,
+      source: id,
       type: "symbol",
       layout: {
         "text-field": this.message,
@@ -136,7 +139,7 @@ export class MapComponent implements OnInit, OnDestroy {
     });
 
     this.clickFlyTo("firebase", 12);
-
+    this.showPopup("firebase");
 
     // Map register source
     this.map.addSource("firebase", {
@@ -264,8 +267,25 @@ export class MapComponent implements OnInit, OnDestroy {
     });
   }
 
-  clickFlyTo(id, zoom) {
+  showPopup(id, message?) {
     this.map.on('dblclick', id, event => {
+      let description;
+      const coordinates = event.features[0].geometry.coordinates.slice();
+      if (!message) {
+        description = event.features[0].properties.message;
+      } else {
+        description = message;
+      }
+
+      new mapboxgl.Popup()
+        .setLngLat(coordinates)
+        .setHTML(description)
+        .addTo(this.map);
+    });
+  }
+
+  clickFlyTo(id, zoom) {
+    this.map.on('click', id, event => {
         this.map.flyTo({
           center: event.features[0].geometry.coordinates,
           zoom: zoom
