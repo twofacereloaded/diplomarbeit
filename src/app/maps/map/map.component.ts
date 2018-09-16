@@ -27,6 +27,12 @@ export class MapComponent implements OnInit, OnDestroy {
   sourceMarkers: any;
   sourceCords: any;
   dolceMarker: any;
+
+  coordinatesFb;
+  trackerMarker;
+  sourceTracker;
+
+  addedSource = false;
   // Angularfire CRUD
   markers: any;
   keys: any;
@@ -74,6 +80,7 @@ export class MapComponent implements OnInit, OnDestroy {
     });
     // Get Markers from firebase
     this.markers = this.mapService.getMarker();
+    this.dolceMarker = this.mapService.setMarkerGeoJson(this.coordinates);
     // Get Keys from firebase if Authenticated
     if (this.userIsAuthenticated) {
       this.mapService.getKeys().subscribe(data => {
@@ -84,12 +91,12 @@ export class MapComponent implements OnInit, OnDestroy {
         }
       });
     }
-    this.dolceMarker = this.mapService.setMarkerGeoJson(this.coordinates);
-    /// Add realtime data on map load
+    // Add realtime data on map load
     this.map.on("load", () => {
       this.initialiseFirebaseMarkers();
-      this.initialiseTracking();
       this.initialisePreSetMarker();
+      this.initialiseTracking();
+      this.initialiseSimulation();
     });
   }
 
@@ -158,6 +165,41 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   initialiseTracking() {
+    this.coordinatesFb = this.mapService.getCords();
+    this.coordinatesFb.valueChanges().subscribe(cords => {
+      if (cords.length > 0) {
+        const lastCord = cords[cords.length - 1];
+        const coordinates = [lastCord.lng, lastCord.lat];
+        this.trackerMarker = this.mapService.setMarkerGeoJson(coordinates);
+        console.log(this.trackerMarker);
+        if (!this.addedSource) {
+          /// Map register source
+          this.map.addSource("Tracker", {
+            type: "geojson",
+            data: this.trackerMarker
+
+          });
+          // Map get source
+          this.sourceTracker = this.map.getSource("Tracker");
+          // Create map layers with realtime data
+          this.map.addLayer({
+            id: "Tracker",
+            source: "Tracker",
+            type: "circle",
+            paint: {
+              "circle-radius": 10,
+              "circle-color": "#000000"
+            }
+          });
+          this.addedSource = true;
+        }
+        this.sourceTracker.setData(this.trackerMarker
+      );
+      }
+    });
+  }
+
+  initialiseSimulation() {
     /// Map register source
     this.map.addSource("Point", {
       type: "geojson",

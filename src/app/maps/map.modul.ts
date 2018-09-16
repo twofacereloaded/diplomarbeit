@@ -7,7 +7,6 @@ export interface IGeoJson {
     type: string;
     geometry: IGeometry;
     properties?: any;
-    $key?: string;
 }
 
 export class GeoJson implements IGeoJson {
