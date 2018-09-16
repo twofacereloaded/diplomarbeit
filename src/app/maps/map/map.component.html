@@ -4,7 +4,11 @@
     <div id="map"></div>
   </div>
   <hr>
-  <button mat-raised-button color="accent" (click)="removeMarker(lastKey)">Delete</button>
-  <button mat-raised-button color="accent" (click)="flyTo(dolceMarker)">ok cool</button>
+  <div *ngIf="userIsAuthenticated">
+    <button mat-raised-button color="accent" (click)="removeMarker(lastKey)">Delete Last</button>
+    <button mat-raised-button color="accent" (click)="removeMarker(firstKey)">Delete First</button>
+  </div>
+  <button mat-raised-button color="accent" (click)="flyTo(dolceMarker)">Fly to</button>
+  <button mat-raised-button color="accent" (click)="flyOut(dolceMarker)">Fly out</button>
 </div>
 

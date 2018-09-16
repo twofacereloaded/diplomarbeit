@@ -11,28 +11,27 @@ import { Subscription } from "rxjs";
   styleUrls: ["./map.component.css"]
 })
 export class MapComponent implements OnInit, OnDestroy {
-  isLoading = false;
-
+  // Authentication
   userIsAuthenticated = false;
   userId: string;
-  /// default settings Mapbox
+  private authStatusSub: Subscription;
+  // default settings Mapbox
   map: Map;
   lat = 47.424778;
   lng = 12.849172;
   coordinates = [this.lng, this.lat];
   startZoom = 2;
+  message = "Dolce Vita";
   testGeoJsonUrl = "https://wanderdrone.appspot.com/";
-
+  // Mapbox data source
   sourceMarkers: any;
   sourceCords: any;
-
-  message = "Dolce Vita";
-  dolceMarker;
-
+  dolceMarker: any;
+  // Angularfire CRUD
   markers: any;
   keys: any;
   lastKey: any;
-  private authStatusSub: Subscription;
+  firstKey: any;
 
   constructor(
     private mapService: MapService,
@@ -60,11 +59,11 @@ export class MapComponent implements OnInit, OnDestroy {
       zoom: this.startZoom,
       center: this.coordinates
     });
-   }
+  }
 
   initialiseMap() {
     // Add Marker on Click
-    this.map.on('click', event => {
+    this.map.on("click", event => {
       if (this.userIsAuthenticated) {
         const coordinates = [event.lngLat.lng, event.lngLat.lat];
         const newMarker = new GeoJson(coordinates, {
@@ -75,112 +74,115 @@ export class MapComponent implements OnInit, OnDestroy {
     });
     // Get Markers from firebase
     this.markers = this.mapService.getMarker();
-    this.mapService.getKeys().subscribe(data => {
-      this.keys = data;
-      if (this.keys.length > 0) {
-        this.lastKey = this.keys[this.keys.length - 1].key;
-      }
-    });
+    // Get Keys from firebase if Authenticated
+    if (this.userIsAuthenticated) {
+      this.mapService.getKeys().subscribe(data => {
+        this.keys = data;
+        if (this.keys.length > 0) {
+          this.lastKey = this.keys[this.keys.length - 1].key;
+          this.firstKey = this.keys[0].key;
+        }
+      });
+    }
     this.dolceMarker = this.mapService.setMarkerGeoJson(this.coordinates);
     /// Add realtime data on map load
-    this.map.on('load', () => {
+    this.map.on("load", () => {
       this.initialiseFirebaseMarkers();
       this.initialiseTracking();
       this.initialisePreSetMarker();
-     });
+    });
   }
 
   initialisePreSetMarker() {
-      // Map register source
+    // Map register source
     this.map.addSource("Dolce", {
       type: "geojson",
       data: this.dolceMarker
     });
 
-    console.log(this.lastKey);
     this.map.addLayer({
-      id: 'Dolce',
-      source: 'Dolce',
-      type: 'symbol',
+      id: "Dolce",
+      source: "Dolce",
+      type: "symbol",
       layout: {
-        'text-field': this.message,
-        'text-size': 12,
-        'icon-image': 'rocket-15',
-        'text-offset': [0, 1.2]
+        "text-field": this.message,
+        "text-size": 12,
+        "icon-image": "rocket-15",
+        "text-offset": [0, 1.2]
       },
       paint: {
-        'text-color': '#f16624',
-        'text-halo-color': '#fff',
-        'text-halo-width': 2
+        "text-color": "#f16624",
+        "text-halo-color": "#fff",
+        "text-halo-width": 2
       }
     });
   }
 
   initialiseFirebaseMarkers() {
-      // Map register source
-      this.map.addSource("firebase", {
-        type: "geojson",
-        data: {
-          type: "FeatureCollection",
-          features: []
-        }
-      });
+    // Map register source
+    this.map.addSource("firebase", {
+      type: "geojson",
+      data: {
+        type: "FeatureCollection",
+        features: []
+      }
+    });
 
-      // Map get source
-      this.sourceMarkers = this.map.getSource('firebase');
-      // Subscribe to realtime database and set data source
-      this.markers.valueChanges().subscribe(markers => {
-        console.log(markers);
-        const data = new FeatureCollection(markers);
-        this.sourceMarkers.setData(data);
-      });
+    // Map get source
+    this.sourceMarkers = this.map.getSource("firebase");
+    // Subscribe to realtime database and set data source
+    this.markers.valueChanges().subscribe(markers => {
+      console.log(markers);
+      const data = new FeatureCollection(markers);
+      this.sourceMarkers.setData(data);
+    });
 
-      // Create map layers with marker data
-      this.map.addLayer({
-        id: "firebase",
-        source: "firebase",
-        type: 'symbol',
-        layout: {
-          'text-field': '{message}',
-          'text-size': 24,
-          'text-transform': 'uppercase',
-          'icon-image': 'rocket-15',
-          'text-offset': [0, 1.5]
-        },
-        paint: {
-          'text-color': '#f16624',
-          'text-halo-color': '#fff',
-          'text-halo-width': 2
-        }
-      });
+    // Create map layers with marker data
+    this.map.addLayer({
+      id: "firebase",
+      source: "firebase",
+      type: "symbol",
+      layout: {
+        "text-field": "{message}",
+        "text-size": 24,
+        "text-transform": "uppercase",
+        "icon-image": "rocket-15",
+        "text-offset": [0, 1.5]
+      },
+      paint: {
+        "text-color": "#f16624",
+        "text-halo-color": "#fff",
+        "text-halo-width": 2
+      }
+    });
   }
 
   initialiseTracking() {
-      /// Map register source
-      this.map.addSource("Point", {
-        type: "geojson",
-        data: this.testGeoJsonUrl
-      });
+    /// Map register source
+    this.map.addSource("Point", {
+      type: "geojson",
+      data: this.testGeoJsonUrl
+    });
 
-      // Map get source
-      this.sourceCords = this.map.getSource('Point');
+    // Map get source
+    this.sourceCords = this.map.getSource("Point");
 
-      // Update layer
-      window.setInterval(() => {
-        const data = this.testGeoJsonUrl;
-        this.sourceCords.setData(data);
-      }, 2000);
+    // Update layer
+    window.setInterval(() => {
+      const data = this.testGeoJsonUrl;
+      this.sourceCords.setData(data);
+    }, 2000);
 
-      // Create map layers with realtime data
-      this.map.addLayer({
-        id: 'Point',
-        source: 'Point',
-        type: 'circle',
-        paint: {
-          'circle-radius': 10,
-          'circle-color': '#007cbf'
-        }
-      });
+    // Create map layers with realtime data
+    this.map.addLayer({
+      id: "Point",
+      source: "Point",
+      type: "circle",
+      paint: {
+        "circle-radius": 10,
+        "circle-color": "#007cbf"
+      }
+    });
   }
 
   /// Helpers
@@ -188,6 +190,13 @@ export class MapComponent implements OnInit, OnDestroy {
     this.map.flyTo({
       center: data.geometry.coordinates,
       zoom: 18
+    });
+  }
+
+  flyOut(data: GeoJson) {
+    this.map.flyTo({
+      center: data.geometry.coordinates,
+      zoom: 2
     });
   }
 
