@@ -5,7 +5,6 @@ import { PostCreateComponent } from './posts/post-create/post-create.component';
 import { AuthGuard } from './auth/auth.guard';
 import { MapComponent } from './maps/map/map.component';
 
-
 const routes: Routes = [
   { path: 'list', component: PostListComponent },
   { path: 'create', component: PostCreateComponent, canActivate: [AuthGuard] },

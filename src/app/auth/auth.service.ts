@@ -6,7 +6,7 @@ import { Subject } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { AuthData } from './auth-data.model';
 
-const BACKEND_URL = environment.apiUrl + '/user/';
+const BACKEND_URL = environment.apiUrl + '/user';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -24,6 +24,10 @@ export class AuthService {
 
   getIsAuth() {
     return this.isAuthenticated;
+  }
+
+  testToken() {
+    this.http.get(BACKEND_URL + '/check').subscribe();
   }
 
   getUserId() {
@@ -88,12 +92,18 @@ export class AuthService {
     if (expiresIn > 0) {
       this.token = authInformation.token;
       this.isAuthenticated = true;
+      this.authStatusListener.next(true);
       this.userId = authInformation.userId;
       this.setAuthTimer(expiresIn / 1000);
-      this.authStatusListener.next(true);
-      this.http
-        .get(
-          BACKEND_URL + '/login', null)
+        this.http.get(BACKEND_URL + '/check').subscribe(response => {
+        const res: any = response;
+        if (res.message === 'Auth worked') {
+          console.log('Reauthenticated');
+        } else {
+          this.isAuthenticated = false;
+          this.authStatusListener.next(false);
+        }
+      });
     }
   }
 

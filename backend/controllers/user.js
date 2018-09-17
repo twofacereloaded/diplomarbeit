@@ -26,6 +26,12 @@ exports.createUser = (req, res, next) => {
   });
 }
 
+exports.userCheck = (req, res, next) => {
+  return res.status(201).json({
+    message: "Auth worked"
+  });
+}
+
 exports.userLoggin = (req, res, next) => {
   let fetchedUser;
   User.findOne({ email: req.body.email })
