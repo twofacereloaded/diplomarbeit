@@ -16,30 +16,37 @@ export class MapComponent implements OnInit, OnDestroy {
   userIsAuthenticated = false;
   userId: string;
   private authStatusSub: Subscription;
+
   // default settings Mapbox
   map: Map;
   lat = 47.424778;
   lng = 12.849172;
   coordinates = [this.lng, this.lat];
   startZoom = 12;
-  message = "Dolce Vita";
-  testGeoJsonUrl = "https://wanderdrone.appspot.com/";
-  // Mapbox data source
+  message = "new marker";
+
+  // firebase markers data source
   sourceMarkers: any;
-  sourceCords: any;
-  dolceMarker: any;
-
-  coordinatesFb;
-  trackerMarker;
-  sourceTracker;
-
-  addedSource = false;
-  // Angularfire CRUD
   markers: any;
   keys: any;
-  lastKey: any;
   firstKey: any;
+  lastKey: any;
   setNewMarker = true;
+
+  // simulation data source
+  sourceCords: any;
+  testGeoJsonUrl = "https://wanderdrone.appspot.com/";
+
+  // preset markers data source
+  dolceMarker: any;
+  dolceMarkerMessage = "Dolce Vita Marker";
+
+  // tracking
+  sourceTracker;
+  coordinatesFb;
+  trackerMarker;
+  addedSource = false;
+  // add source only once on initialise tracking
 
   constructor(
     private mapService: MapService,
@@ -75,8 +82,7 @@ export class MapComponent implements OnInit, OnDestroy {
     this.map.doubleClickZoom.disable();
     // Get Markers from firebase
     this.markers = this.mapService.getMarker();
-    this.dolceMarker = this.mapService
-    .setMarkerGeoJson(this.coordinates);
+    this.dolceMarker = this.mapService.setMarkerGeoJson(this.coordinates);
     // Get Keys from firebase if Authenticated
     if (this.userIsAuthenticated) {
       this.mapService.getKeys().subscribe(data => {
@@ -105,14 +111,14 @@ export class MapComponent implements OnInit, OnDestroy {
     });
 
     this.clickFlyTo(id, 14);
-    this.showPopup(id, this.message);
+    this.showPopup(id, this.dolceMarkerMessage);
 
     this.map.addLayer({
       id: id,
       source: id,
       type: "symbol",
       layout: {
-        "text-field": this.message,
+        "text-field": this.dolceMarkerMessage,
         "text-size": 12,
         "icon-image": "rocket-15",
         "text-offset": [0, 1.2]
@@ -126,10 +132,9 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   initialiseFirebaseMarkers() {
-
     // Add Marker on Click
     this.map.on("click", event => {
-      if (this.userIsAuthenticated && this.setNewMarker) {
+      if (this.userIsAuthenticated && !this.setNewMarker) {
         const coordinates = [event.lngLat.lng, event.lngLat.lat];
         const newMarker = new GeoJson(coordinates, {
           message: this.message
@@ -192,7 +197,6 @@ export class MapComponent implements OnInit, OnDestroy {
           this.map.addSource("Tracker", {
             type: "geojson",
             data: this.trackerMarker
-
           });
           // Map get source
           this.sourceTracker = this.map.getSource("Tracker");
@@ -208,8 +212,7 @@ export class MapComponent implements OnInit, OnDestroy {
           });
           this.addedSource = true;
         }
-        this.sourceTracker.setData(this.trackerMarker
-      );
+        this.sourceTracker.setData(this.trackerMarker);
       }
     });
   }
@@ -268,7 +271,7 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   showPopup(id, message?) {
-    this.map.on('dblclick', id, event => {
+    this.map.on("dblclick", id, event => {
       let description;
       const coordinates = event.features[0].geometry.coordinates.slice();
       if (!message) {
@@ -285,11 +288,11 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   clickFlyTo(id, zoom) {
-    this.map.on('click', id, event => {
-        this.map.flyTo({
-          center: event.features[0].geometry.coordinates,
-          zoom: zoom
-        });
+    this.map.on("click", id, event => {
+      this.map.flyTo({
+        center: event.features[0].geometry.coordinates,
+        zoom: zoom
+      });
     });
     this.pointerOnOff(id);
   }

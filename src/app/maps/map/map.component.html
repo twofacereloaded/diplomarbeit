@@ -9,10 +9,12 @@
   <button mat-raised-button color="accent" (click)="flyOut(dolceMarker)">Übersicht</button>
   <div *ngIf="userIsAuthenticated">
     <hr>
+    <input type="text" [(ngModel)]="message" placeholder="your message...">
     <button mat-raised-button color="accent" (click)="removeMarker(lastKey)">Delete Last</button>
     <button mat-raised-button color="accent" (click)="removeMarker(firstKey)">Delete First</button>
     <button mat-raised-button color="accent" (click)="removeAllMarkers()">Delete All</button>
-    <button mat-raised-button color="accent" (click)="setNewMarker = !setNewMarker">Add Marker</button>
+    <button *ngIf="!setNewMarker" mat-raised-button color="accent" (click)="setNewMarker = true">Add Marker On</button>
+    <button *ngIf="setNewMarker" mat-raised-button color="accent" (click)="setNewMarker = false">Add Marker Off</button>
   </div>
 </div>
 
