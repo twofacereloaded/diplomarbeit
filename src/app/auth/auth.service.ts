@@ -91,6 +91,9 @@ export class AuthService {
       this.userId = authInformation.userId;
       this.setAuthTimer(expiresIn / 1000);
       this.authStatusListener.next(true);
+      this.http
+        .get(
+          BACKEND_URL + '/login', null)
     }
   }
 
