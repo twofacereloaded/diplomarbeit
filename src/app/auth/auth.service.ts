@@ -88,16 +88,15 @@ export class AuthService {
     if (expiresIn > 0) {
       this.token = authInformation.token;
       this.isAuthenticated = true;
-      this.authStatusListener.next(true);
-      this.userId = authInformation.userId;
-      this.setAuthTimer(expiresIn / 1000);
-        this.http.get(BACKEND_URL + '/check').subscribe(response => {
+      this.http.get(BACKEND_URL + '/check').subscribe(response => {
         const res: any = response;
         if (res.message === 'Auth worked') {
+          this.authStatusListener.next(true);
+          this.userId = authInformation.userId;
+          this.setAuthTimer(expiresIn / 1000);
           console.log('Reauthenticated');
         } else {
-          this.isAuthenticated = false;
-          this.authStatusListener.next(false);
+          this.logout();
         }
       });
     }

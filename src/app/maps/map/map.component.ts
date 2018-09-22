@@ -58,6 +58,7 @@ export class MapComponent implements OnInit, OnDestroy {
     this.authStatusSub = this.authService
       .getAuthStatusListener()
       .subscribe(isAuthenticated => {
+        console.log(isAuthenticated);
         this.userIsAuthenticated = isAuthenticated;
         this.userId = this.authService.getUserId();
         console.log(this.userIsAuthenticated);
