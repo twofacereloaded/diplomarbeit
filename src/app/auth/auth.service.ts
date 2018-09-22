@@ -26,10 +26,6 @@ export class AuthService {
     return this.isAuthenticated;
   }
 
-  testToken() {
-    this.http.get(BACKEND_URL + '/check').subscribe();
-  }
-
   getUserId() {
     return this.userId;
   }

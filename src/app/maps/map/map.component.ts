@@ -70,7 +70,7 @@ export class MapComponent implements OnInit, OnDestroy {
     this.map = new Map({
       // tslint:disable-next-line:quotemark
       container: "map", // tslint:disable-next-line:quotemark
-      style: "mapbox://styles/mapbox/light-v9",
+      style: "mapbox://styles/mapbox/dark-v9",
       zoom: this.startZoom,
       maxZoom: 18,
       minZoom: 2,
