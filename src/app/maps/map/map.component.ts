@@ -289,11 +289,13 @@ export class MapComponent implements OnInit, OnDestroy {
 
   clickFlyTo(id, zoom) {
     this.map.on("click", id, event => {
-      this.map.flyTo({
-        center: event.features[0].geometry.coordinates,
-        zoom: zoom
-      });
-    });
+      if (this.setNewMarker) {
+        this.map.flyTo({
+          center: event.features[0].geometry.coordinates,
+          zoom: zoom
+        });
+      }
+    }); 
     this.pointerOnOff(id);
   }
 
