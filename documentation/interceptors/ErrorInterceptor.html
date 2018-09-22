@@ -256,12 +256,11 @@ export class ErrorInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest&lt;any&gt;, next: HttpHandler) {
     return next.handle(req).pipe(
       catchError((error: HttpErrorResponse) &#x3D;&gt; {
-        let errorMessage &#x3D; &#x27;An unknown error occurred!&#x27;;
+        let errorMessage &#x3D; &#x27;An error occurred!&#x27;;
         if (error.error.message) {
           errorMessage &#x3D; error.error.message;
         }
         this.dialog.open(ErrorComponent, { data: { message: errorMessage } });
-        // this.errorService.throwError(errorMessage);
         return throwError(error);
       })
     );

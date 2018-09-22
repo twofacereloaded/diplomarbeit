@@ -288,7 +288,7 @@
 
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="129" class="link-to-prism">src/app/auth/auth.service.ts:129</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="128" class="link-to-prism">src/app/auth/auth.service.ts:128</a></div>
                             </td>
                         </tr>
 
@@ -409,7 +409,7 @@
 
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="135" class="link-to-prism">src/app/auth/auth.service.ts:135</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="134" class="link-to-prism">src/app/auth/auth.service.ts:134</a></div>
                             </td>
                         </tr>
 
@@ -680,7 +680,7 @@
 
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="106" class="link-to-prism">src/app/auth/auth.service.ts:106</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="105" class="link-to-prism">src/app/auth/auth.service.ts:105</a></div>
                             </td>
                         </tr>
 
@@ -720,7 +720,7 @@
 
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="123" class="link-to-prism">src/app/auth/auth.service.ts:123</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="122" class="link-to-prism">src/app/auth/auth.service.ts:122</a></div>
                             </td>
                         </tr>
 
@@ -815,7 +815,7 @@
 
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="116" class="link-to-prism">src/app/auth/auth.service.ts:116</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="115" class="link-to-prism">src/app/auth/auth.service.ts:115</a></div>
                             </td>
                         </tr>
 
@@ -1138,16 +1138,15 @@ export class AuthService {
     if (expiresIn &gt; 0) {
       this.token &#x3D; authInformation.token;
       this.isAuthenticated &#x3D; true;
-      this.authStatusListener.next(true);
-      this.userId &#x3D; authInformation.userId;
-      this.setAuthTimer(expiresIn / 1000);
-        this.http.get(BACKEND_URL + &#x27;/check&#x27;).subscribe(response &#x3D;&gt; {
+      this.http.get(BACKEND_URL + &#x27;/check&#x27;).subscribe(response &#x3D;&gt; {
         const res: any &#x3D; response;
         if (res.message &#x3D;&#x3D;&#x3D; &#x27;Auth worked&#x27;) {
+          this.authStatusListener.next(true);
+          this.userId &#x3D; authInformation.userId;
+          this.setAuthTimer(expiresIn / 1000);
           console.log(&#x27;Reauthenticated&#x27;);
         } else {
-          this.isAuthenticated &#x3D; false;
-          this.authStatusListener.next(false);
+          this.logout();
         }
       });
     }

@@ -699,7 +699,7 @@
                     </tr>
                     <tr>
                         <td class="col-md-4">
-                            <i>Default value : </i><code>2</code>
+                            <i>Default value : </i><code>5</code>
                         </td>
                     </tr>
                         <tr>
@@ -910,7 +910,7 @@ export class PostListComponent implements OnInit, OnDestroy {
   posts: Post[] &#x3D; [];
   isLoading &#x3D; false;
   totalPosts &#x3D; 0;
-  postsPerPage &#x3D; 2;
+  postsPerPage &#x3D; 5;
   currentPage &#x3D; 1;
   pageSizeOptions &#x3D; [1, 2, 5, 10];
   userIsAuthenticated &#x3D; false;
@@ -923,15 +923,15 @@ export class PostListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.isLoading &#x3D; true;
     this.postsService.getPosts(this.postsPerPage, this.currentPage);
-    this.userId &#x3D; this.authService.getUserId();
     this.postsSub &#x3D; this.postsService
-      .getPostUpdateListener()
-      .subscribe((postData: { posts: Post[], postCount: number }) &#x3D;&gt; {
-        this.isLoading &#x3D; false;
-        this.totalPosts &#x3D; postData.postCount;
-        this.posts &#x3D; postData.posts;
-      });
+    .getPostUpdateListener()
+    .subscribe((postData: { posts: Post[], postCount: number }) &#x3D;&gt; {
+      this.isLoading &#x3D; false;
+      this.totalPosts &#x3D; postData.postCount;
+      this.posts &#x3D; postData.posts;
+    });
     this.userIsAuthenticated &#x3D; this.authService.getIsAuth();
+    this.userId &#x3D; this.authService.getUserId();
     this.authStatusSub &#x3D; this.authService
     .getAuthStatusListener()
     .subscribe(isAuthenticated &#x3D;&gt; {

@@ -328,6 +328,7 @@ export class AppComponent implements OnInit {
         <pre class="line-numbers"><code class="language-html">&lt;app-header&gt;&lt;/app-header&gt;
 &lt;main&gt;
   &lt;router-outlet&gt;&lt;/router-outlet&gt;
+  &lt;app-map&gt;&lt;/app-map&gt;
 &lt;/main&gt;
 
 </code></pre>
@@ -358,7 +359,7 @@ export class AppComponent implements OnInit {
 <script src="../js/libs/htmlparser.js"></script>
 <script src="../js/libs/deep-iterator.js"></script>
 <script>
-        var COMPONENT_TEMPLATE = '<div><app-header></app-header><main>  <router-outlet></router-outlet></main></div>'
+        var COMPONENT_TEMPLATE = '<div><app-header></app-header><main>  <router-outlet></router-outlet>  <app-map></app-map></main></div>'
     var COMPONENTS = [{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'ErrorComponent', 'selector': 'app-error'},{'name': 'HeaderComponent', 'selector': 'app-header'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'MapComponent', 'selector': 'app-map'},{'name': 'PostCreateComponent', 'selector': 'app-post-create'},{'name': 'PostListComponent', 'selector': 'app-post-list'},{'name': 'SignupComponent', 'selector': 'app-signup'}];
     var DIRECTIVES = [];
     var ACTUAL_COMPONENT = {'name': 'AppComponent'};
