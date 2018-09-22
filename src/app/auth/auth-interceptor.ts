@@ -8,7 +8,6 @@ export class AuthInterceptor implements HttpInterceptor {
   constructor(private authService: AuthService) {}
   intercept(req: HttpRequest<any>, next: HttpHandler) {
       const authToken = this.authService.getToken();
-      // tslint:disable-next-line:no-unused-expression
       const authRequest = req.clone({
         headers: req.headers.set('Authorization', 'Bearer ' + authToken)
       });

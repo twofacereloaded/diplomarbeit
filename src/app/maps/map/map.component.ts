@@ -1,15 +1,15 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
-import * as mapboxgl from "mapbox-gl";
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import * as mapboxgl from 'mapbox-gl';
 import { Map } from 'mapbox-gl';
 import { MapService } from '../map.service';
 import { GeoJson, FeatureCollection } from '../map.modul';
-import { AuthService } from "../../auth/auth.service";
-import { Subscription } from "rxjs";
+import { AuthService } from '../../auth/auth.service';
+import { Subscription } from 'rxjs';
 
 @Component({
-  selector: "app-map",
-  templateUrl: "./map.component.html",
-  styleUrls: ["./map.component.css"]
+  selector: 'app-map',
+  templateUrl: './map.component.html',
+  styleUrls: ['./map.component.css']
 })
 export class MapComponent implements OnInit, OnDestroy {
   // Authentication
@@ -23,7 +23,7 @@ export class MapComponent implements OnInit, OnDestroy {
   lng = 12.849172;
   coordinates = [this.lng, this.lat];
   startZoom = 12;
-  message = "new marker";
+  message = 'new marker';
 
   // firebase markers data source
   sourceMarkers: any;
@@ -35,11 +35,11 @@ export class MapComponent implements OnInit, OnDestroy {
 
   // simulation data source
   sourceCords: any;
-  testGeoJsonUrl = "https://wanderdrone.appspot.com/";
+  testGeoJsonUrl = 'https://wanderdrone.appspot.com/';
 
   // preset markers data source
   dolceMarker: any;
-  dolceMarkerMessage = "Dolce Vita Marker";
+  dolceMarkerMessage = 'Dolce Vita Marker';
 
   // tracking
   sourceTracker;
@@ -49,8 +49,8 @@ export class MapComponent implements OnInit, OnDestroy {
   // add source only once on initialise tracking
 
   constructor(
-    private mapService: MapService,
-    private authService: AuthService
+    public mapService: MapService,
+    public authService: AuthService
   ) {}
 
   ngOnInit() {
@@ -94,7 +94,7 @@ export class MapComponent implements OnInit, OnDestroy {
       });
     }
     // Add realtime data on map load
-    this.map.on("load", () => {
+    this.map.on('load', () => {
       this.initialisePreSetMarker();
       this.initialiseTracking();
       this.initialiseSimulation();
@@ -104,9 +104,9 @@ export class MapComponent implements OnInit, OnDestroy {
 
   initialisePreSetMarker() {
     // Map register source
-    const id = "Dolce";
+    const id = 'Dolce';
     this.map.addSource(id, {
-      type: "geojson",
+      type: 'geojson',
       data: this.dolceMarker
     });
 
@@ -116,24 +116,24 @@ export class MapComponent implements OnInit, OnDestroy {
     this.map.addLayer({
       id: id,
       source: id,
-      type: "symbol",
+      type: 'symbol',
       layout: {
-        "text-field": this.dolceMarkerMessage,
-        "text-size": 12,
-        "icon-image": "rocket-15",
-        "text-offset": [0, 1.2]
+        'text-field': this.dolceMarkerMessage,
+        'text-size': 12,
+        'icon-image': 'rocket-15',
+        'text-offset': [0, 1.2]
       },
       paint: {
-        "text-color": "#f16624",
-        "text-halo-color": "#fff",
-        "text-halo-width": 2
+        'text-color': '#f16624',
+        'text-halo-color': '#fff',
+        'text-halo-width': 2
       }
     });
   }
 
   initialiseFirebaseMarkers() {
     // Add Marker on Click
-    this.map.on("click", event => {
+    this.map.on('click', event => {
       if (this.userIsAuthenticated && !this.setNewMarker) {
         const coordinates = [event.lngLat.lng, event.lngLat.lat];
         const newMarker = new GeoJson(coordinates, {
@@ -143,20 +143,20 @@ export class MapComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.clickFlyTo("firebase", 12);
-    this.showPopup("firebase");
+    this.clickFlyTo('firebase', 12);
+    this.showPopup('firebase');
 
     // Map register source
-    this.map.addSource("firebase", {
-      type: "geojson",
+    this.map.addSource('firebase', {
+      type: 'geojson',
       data: {
-        type: "FeatureCollection",
+        type: 'FeatureCollection',
         features: []
       }
     });
 
     // Map get source
-    this.sourceMarkers = this.map.getSource("firebase");
+    this.sourceMarkers = this.map.getSource('firebase');
     // Subscribe to realtime database and set data source
     this.markers.valueChanges().subscribe(markers => {
       console.log(markers);
@@ -166,20 +166,20 @@ export class MapComponent implements OnInit, OnDestroy {
 
     // Create map layers with marker data
     this.map.addLayer({
-      id: "firebase",
-      source: "firebase",
-      type: "symbol",
+      id: 'firebase',
+      source: 'firebase',
+      type: 'symbol',
       layout: {
-        "text-field": "{message}",
-        "text-size": 24,
-        "text-transform": "uppercase",
-        "icon-image": "rocket-15",
-        "text-offset": [0, 1.5]
+        'text-field': '{message}',
+        'text-size': 24,
+        'text-transform': 'uppercase',
+        'icon-image': 'rocket-15',
+        'text-offset': [0, 1.5]
       },
       paint: {
-        "text-color": "#f16624",
-        "text-halo-color": "#fff",
-        "text-halo-width": 2
+        'text-color': '#f16624',
+        'text-halo-color': '#fff',
+        'text-halo-width': 2
       }
     });
   }
@@ -194,20 +194,20 @@ export class MapComponent implements OnInit, OnDestroy {
         console.log(this.trackerMarker);
         if (!this.addedSource) {
           /// Map register source
-          this.map.addSource("Tracker", {
-            type: "geojson",
+          this.map.addSource('Tracker', {
+            type: 'geojson',
             data: this.trackerMarker
           });
           // Map get source
-          this.sourceTracker = this.map.getSource("Tracker");
+          this.sourceTracker = this.map.getSource('Tracker');
           // Create map layers with realtime data
           this.map.addLayer({
-            id: "Tracker",
-            source: "Tracker",
-            type: "circle",
+            id: 'Tracker',
+            source: 'Tracker',
+            type: 'circle',
             paint: {
-              "circle-radius": 10,
-              "circle-color": "#000000"
+              'circle-radius': 10,
+              'circle-color': '#000000'
             }
           });
           this.addedSource = true;
@@ -219,13 +219,13 @@ export class MapComponent implements OnInit, OnDestroy {
 
   initialiseSimulation() {
     /// Map register source
-    this.map.addSource("Point", {
-      type: "geojson",
+    this.map.addSource('Point', {
+      type: 'geojson',
       data: this.testGeoJsonUrl
     });
 
     // Map get source
-    this.sourceCords = this.map.getSource("Point");
+    this.sourceCords = this.map.getSource('Point');
 
     // Update layer
     window.setInterval(() => {
@@ -235,12 +235,12 @@ export class MapComponent implements OnInit, OnDestroy {
 
     // Create map layers with realtime data
     this.map.addLayer({
-      id: "Point",
-      source: "Point",
-      type: "circle",
+      id: 'Point',
+      source: 'Point',
+      type: 'circle',
       paint: {
-        "circle-radius": 10,
-        "circle-color": "#007cbf"
+        'circle-radius': 10,
+        'circle-color': '#007cbf'
       }
     });
   }
@@ -271,7 +271,7 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   showPopup(id, message?) {
-    this.map.on("dblclick", id, event => {
+    this.map.on('dblclick', id, event => {
       let description;
       const coordinates = event.features[0].geometry.coordinates.slice();
       if (!message) {
@@ -288,23 +288,23 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   clickFlyTo(id, zoom) {
-    this.map.on("click", id, event => {
+    this.map.on('click', id, event => {
       if (this.setNewMarker) {
         this.map.flyTo({
           center: event.features[0].geometry.coordinates,
           zoom: zoom
         });
       }
-    }); 
+    });
     this.pointerOnOff(id);
   }
 
   pointerOnOff(id) {
-    this.map.on("mouseenter", id, () => {
-      this.map.getCanvas().style.cursor = "pointer";
+    this.map.on('mouseenter', id, () => {
+      this.map.getCanvas().style.cursor = 'pointer';
     });
-    this.map.on("mouseleave", id, () => {
-      this.map.getCanvas().style.cursor = "";
+    this.map.on('mouseleave', id, () => {
+      this.map.getCanvas().style.cursor = '';
     });
   }
 
