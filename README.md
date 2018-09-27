@@ -8,4 +8,4 @@ Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app w
 
 ## Documentation
 
-Run `npm run compodoc` for a compodoc documentation server.
+Run `npm run compodoc` for a compodoc documentation server `http://localhost:8080/`.
