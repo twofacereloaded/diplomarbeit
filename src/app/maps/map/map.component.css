@@ -1,14 +1,14 @@
 
 #map  {
   height: 500px;
-  outline: none;
   top: 0;
   bottom: 0;
   width: 100%;
+  border-radius:7px;
 }
 
 .row-map{
-  background-color: rgba(244, 244, 244, 0.685);
+  background-color: rgba(246, 246, 244, 1);
   padding: 10px 32px;
   min-height: 640px;
 }

@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
+
 import { FormsModule } from '@angular/forms';
 
 import { environment } from '../environments/environment';
@@ -11,6 +12,7 @@ import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { ErrorComponent } from './error/error.component';
+import { MapComponent } from './maps/map/map.component';
 
 import { AuthInterceptor } from './auth/auth-interceptor';
 import { ErrorInterceptor } from './error/error-interceptor';
@@ -18,9 +20,23 @@ import { ErrorInterceptor } from './error/error-interceptor';
 import { AppRoutingModule } from './app-routing.module';
 import { AngularMaterialModule } from './angular-material.module';
 import { PostsModule } from './posts/posts.module';
-import { MapComponent } from './maps/map/map.component';
 
+import {
+  NgxUiLoaderModule,
+  NgxUiLoaderConfig,
+  SPINNER,
+  POSITION,
+  PB_DIRECTION
+} from 'ngx-ui-loader';
 
+const ngxUiLoaderConfig: NgxUiLoaderConfig = {
+  fgsColor: "black",
+  fgsPosition: "center-center",
+  fgsSize: 100,
+  fgsType: "square-loader",
+  overlayColor: "rgba(255, 255, 255, 0)",
+  hasProgressBar: false
+};
 @NgModule({
   declarations: [
     AppComponent,
@@ -36,6 +52,7 @@ import { MapComponent } from './maps/map/map.component';
     PostsModule,
     HttpClientModule,
     FormsModule,
+    NgxUiLoaderModule.forRoot(ngxUiLoaderConfig),
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireDatabaseModule
   ],

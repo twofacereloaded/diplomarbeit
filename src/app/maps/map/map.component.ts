@@ -5,6 +5,7 @@ import { MapService } from '../map.service';
 import { GeoJson, FeatureCollection } from '../map.modul';
 import { AuthService } from '../../auth/auth.service';
 import { Subscription } from 'rxjs';
+import { NgxUiLoaderService } from "ngx-ui-loader";
 
 @Component({
   selector: 'app-map',
@@ -22,7 +23,7 @@ export class MapComponent implements OnInit, OnDestroy {
   lat = 47.424778;
   lng = 12.849172;
   coordinates = [this.lng, this.lat];
-  startZoom = 12;
+  startZoom = 13;
   message = 'new marker';
 
   // firebase markers data source
@@ -50,20 +51,22 @@ export class MapComponent implements OnInit, OnDestroy {
 
   constructor(
     public mapService: MapService,
-    public authService: AuthService
+    public authService: AuthService,
+    private ngxService: NgxUiLoaderService
   ) {}
 
   ngOnInit() {
     this.userIsAuthenticated = this.authService.getIsAuth();
     this.authStatusSub = this.authService
-      .getAuthStatusListener()
-      .subscribe(isAuthenticated => {
-        console.log(isAuthenticated);
-        this.userIsAuthenticated = isAuthenticated;
-        this.userId = this.authService.getUserId();
-        console.log(this.userIsAuthenticated);
-      });
+    .getAuthStatusListener()
+    .subscribe(isAuthenticated => {
+      console.log(isAuthenticated);
+      this.userIsAuthenticated = isAuthenticated;
+      this.userId = this.authService.getUserId();
+      console.log(this.userIsAuthenticated);
+    });
     this.buildMap();
+    this.ngxService.start();
     this.initialiseMap();
   }
 
@@ -71,7 +74,7 @@ export class MapComponent implements OnInit, OnDestroy {
     this.map = new Map({
       // tslint:disable-next-line:quotemark
       container: "map", // tslint:disable-next-line:quotemark
-      style: "mapbox://styles/mapbox/dark-v9",
+      style: "mapbox://styles/mapbox/light-v9",
       zoom: this.startZoom,
       maxZoom: 18,
       minZoom: 2,
@@ -95,11 +98,12 @@ export class MapComponent implements OnInit, OnDestroy {
       });
     }
     // Add realtime data on map load
+    this.ngxService.stop();
     this.map.on('load', () => {
-      this.initialisePreSetMarker();
+      this.initialiseFirebaseMarkers();
       this.initialiseTracking();
       this.initialiseSimulation();
-      this.initialiseFirebaseMarkers();
+      this.initialisePreSetMarker();
     });
   }
 
