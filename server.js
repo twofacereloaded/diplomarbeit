@@ -50,5 +50,5 @@ const server = http.createServer(app);
 server.on("error", onError);
 server.on("listening", onListening);
 server.listen(port, function () {
-  console.log("The MEAN Server Has Started!");
+  console.log("The Eiswagentracking Server Has Started!");
 });
