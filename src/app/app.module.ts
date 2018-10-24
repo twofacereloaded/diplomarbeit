@@ -30,7 +30,7 @@ import {
 } from 'ngx-ui-loader';
 
 const ngxUiLoaderConfig: NgxUiLoaderConfig = {
-  fgsColor: "black",
+  fgsColor: "#A8EAC0",
   fgsPosition: "center-center",
   fgsSize: 100,
   fgsType: "square-loader",

@@ -27,7 +27,7 @@ exports.createUser = (req, res, next) => {
 }
 
 exports.userCheck = (req, res, next) => {
-  return res.status(200).json({
+  return res.status(202).json({
     message: "Auth worked"
   });
 }
